@@ -4,7 +4,6 @@ const fs = require('fs');
 
 const db = require('./db/connection');
 
-
 function promptUser() {
     inquirer.prompt(
         {
@@ -57,8 +56,7 @@ function promptUser() {
                 promptUser()
             })
         } else if (answers.todo === 'add_role') {
-            console.log("i am going to insert a new role here");
-            promptUser()
+                addRole(answers);   
         } else {
             db.end();
         }
@@ -93,21 +91,43 @@ function promptUser() {
         })
     }
 
-    const addNewRole = [
-        {
-            type:'input',
-            message:'What is the title of the new role you would like to enter?',
-            name:"new_role_input"
-        },
-        {
-            type:'input',
-            message:'What is the salary for this role?',
-            name:'new_role_salary'
-        },
-        {   type:'input',
-            message:'What is the corresponding department ID?',
-            name:'new_role_dept'
-        }]
+
+    function addRole() {
+        db.query("SELECT * FROM department", function (err, results) {
+            let choicesARR = results.map((department) => department.id)
+            const addNewRole = [
+                {
+                    type:'input',
+                    message:'What is the title of the new role you would like to enter?',
+                    name:"new_role_input"
+                },
+                {
+                    type:'input',
+                    message:'What is the salary for this role?',
+                    name:'new_role_salary'
+                },
+                {   type:'input',
+                    message:'What is the corresponding department?',
+                    name:'new_role_dept',
+                    choices: choicesARR
+                }];
+            inquirer.prompt(addNewRole).then((answers) => {
+                console.log(answers);
+                db.query('INSERT INTO role SET ?', 
+                {
+                    title: answers.new_role_input, 
+                    salary: answers.new_role_salary,
+                    department_id: answers.new_role_dept
+                }, 
+                function (err, results) {
+                    if (err) {
+                        console.log(err)
+                    }
+                    promptUser() 
+                });
+            });
+        });
+    };
 
 promptUser();
 
