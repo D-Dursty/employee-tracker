@@ -11,9 +11,13 @@ in your terminal command line.
 Log into your MySql account by running
 `MySql -uroot -p`
 enter prompted information then connect to your database files by connecting in this order:
+
 `SOURCE db/schema.sql;`
+
 `SOURCE db/seeds.sql;`
+
 `SOURCE db/query.sql;`
+
 Once connected, input the word 
 `exit` into your CLI. 
 
@@ -24,6 +28,7 @@ to access the Inquirer prompts. Follow the questions and commands to access, and
 
 ## Links
 Screen Castify: https://watch.screencastify.com/v/XsmvAZoDNw1Kn6cHcTEP
+
 GitHub Repository:  https://github.com/D-Dursty/employee-tracker
 
 ## License
